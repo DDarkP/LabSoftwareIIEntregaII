@@ -11,7 +11,7 @@ public class ArticuloDTO {
 	private Integer id;
 	private String nombre;
 	private String autores;
-	private String cantidadAutores;
+	private String rutaArchivoPDF;
 	private String revista;
 
 	public ArticuloDTO() {
