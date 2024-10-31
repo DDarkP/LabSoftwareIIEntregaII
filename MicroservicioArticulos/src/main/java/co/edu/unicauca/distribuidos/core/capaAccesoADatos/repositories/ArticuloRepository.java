@@ -78,19 +78,19 @@ public class ArticuloRepository {
 	}
 
 	private void cargarArticulos() {
-		ArticuloEntity objArticulo1 = new ArticuloEntity(1, "Articulo Sistemas", "Daniel Muñoz", "1", "Aprobado");
+		ArticuloEntity objArticulo1 = new ArticuloEntity(1, "Articulo Sistemas", "Daniel Muñoz", 1, "Aprobado");
 		this.listaDeArticulos.add(objArticulo1);
 
-		ArticuloEntity objArticulo2 = new ArticuloEntity(2, "Articulo Ingenieria", "Leanel Messi", "1", "Revision");
+		ArticuloEntity objArticulo2 = new ArticuloEntity(2, "Articulo Ingenieria", "Leanel Messi", 1, "Revision");
 		this.listaDeArticulos.add(objArticulo2);
 
-		ArticuloEntity objArticulo3 = new ArticuloEntity(3, "Articulo Biologia", "Cristiano Ronaldo", "1", "Revision");
+		ArticuloEntity objArticulo3 = new ArticuloEntity(3, "Articulo Biologia", "Cristiano Ronaldo", 1, "Revision");
 		this.listaDeArticulos.add(objArticulo3);
 
-		ArticuloEntity objArticulo4 = new ArticuloEntity(4, "Articulo Matematicas", "Erling Haland, Kylian Mbappe", "2", "Aprobado");
+		ArticuloEntity objArticulo4 = new ArticuloEntity(4, "Articulo Matematicas", "Erling Haland, Kylian Mbappe", 2, "Aprobado");
 		this.listaDeArticulos.add(objArticulo4);
 
-		ArticuloEntity objArticulo5 = new ArticuloEntity(5, "Articulo Electronica", "Vini Jr", "1", "Aprobado");
+		ArticuloEntity objArticulo5 = new ArticuloEntity(5, "Articulo Electronica", "Vini Jr", 1, "Aprobado");
 		this.listaDeArticulos.add(objArticulo5);
 	}
 }

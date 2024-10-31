@@ -20,7 +20,7 @@ public class ArticleService {
     private final HttpClient client = HttpClient.newHttpClient();
 //    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public void registrarArticulo(int idArticle, String name, String authors, String archivo, String revista) {
+    public void registrarArticulo(int idArticle, String name, String authors, int cantAutores, String revista) {
         HttpClient cliente = HttpClient.newHttpClient();
         ObjectMapper object_Mapper = new ObjectMapper();
 
@@ -28,7 +28,7 @@ public class ArticleService {
                 "id", idArticle,
                 "nombre", name,
                 "autores", authors,
-                "rutaArchivoPDF", archivo,
+                "cantidadAutores", cantAutores,
                 "revista", revista
         );
         

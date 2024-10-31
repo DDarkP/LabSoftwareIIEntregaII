@@ -11,7 +11,7 @@ public class ArticuloEntity {
 	private Integer id;
 	private String nombre;
 	private String autores;
-	private String rutaArchivoPDF;
+	private Integer cantidadAutores;
 	private String revista;
 
 	public ArticuloEntity() {

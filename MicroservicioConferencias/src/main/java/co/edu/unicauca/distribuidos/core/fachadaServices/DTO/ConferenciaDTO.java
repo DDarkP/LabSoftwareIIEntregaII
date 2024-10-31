@@ -12,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ConferenciaDTO {
 	private Integer id;
-	private String nombre;
+	private String nombreConferencia;
 	private List<ArticuloEntity> articulos;
 	private Integer cantidadMAxArt;
 

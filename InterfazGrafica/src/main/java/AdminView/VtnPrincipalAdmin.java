@@ -6,6 +6,7 @@ package AdminView;
 
 import ArticlesView.ArticleService;
 import ArticlesView.VtnListarArticulos;
+import ConferenceView.VtnListarConferencias;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -13,6 +14,7 @@ import javax.swing.JFrame;
 public final class VtnPrincipalAdmin extends javax.swing.JFrame {
 
     private VtnListarArticulos objVtnListarArticulos;
+    private VtnListarConferencias objVtnListarConferencias;
     private ArticleService objArticleService;
     
     public VtnPrincipalAdmin() {
@@ -62,8 +64,8 @@ public final class VtnPrincipalAdmin extends javax.swing.JFrame {
     private void relacionarInternalFrameConJdesptokPane() {
 //        this.objVtnVerEstadisticas = new VtnVerEstadisticas();
 
-//        this.objVtnListarConferencias = new VtnListarConferencias(this.objServicio);
-//        this.jDesktopPanelPrincipal.add(this.objVtnListarConferencias);
+        this.objVtnListarConferencias = new VtnListarConferencias();
+        this.jDesktopPanelPrincipal.add(this.objVtnListarConferencias);
 
         this.objVtnListarArticulos = new VtnListarArticulos();
         this.jDesktopPanelPrincipal.add(this.objVtnListarArticulos);
@@ -98,8 +100,10 @@ public final class VtnPrincipalAdmin extends javax.swing.JFrame {
 
         jLabelImagenOrganizacion.setText("jLabel1");
 
-        jPanelMenu.setBackground(new java.awt.Color(153, 153, 255));
+        jPanelMenu.setBackground(new java.awt.Color(0, 102, 153));
 
+        jButtonGestionarConferencias.setBackground(new java.awt.Color(0, 102, 153));
+        jButtonGestionarConferencias.setForeground(new java.awt.Color(255, 255, 255));
         jButtonGestionarConferencias.setText("Gestionar conferencias");
         jButtonGestionarConferencias.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -107,6 +111,8 @@ public final class VtnPrincipalAdmin extends javax.swing.JFrame {
             }
         });
 
+        jButtonGestionarArticulos.setBackground(new java.awt.Color(0, 102, 153));
+        jButtonGestionarArticulos.setForeground(new java.awt.Color(255, 255, 255));
         jButtonGestionarArticulos.setText("Gestionar Articulos");
         jButtonGestionarArticulos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -119,11 +125,11 @@ public final class VtnPrincipalAdmin extends javax.swing.JFrame {
         jPanelMenuLayout.setHorizontalGroup(
             jPanelMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelMenuLayout.createSequentialGroup()
-                .addGap(186, 186, 186)
+                .addGap(205, 205, 205)
                 .addComponent(jButtonGestionarConferencias)
-                .addGap(83, 83, 83)
+                .addGap(31, 31, 31)
                 .addComponent(jButtonGestionarArticulos)
-                .addContainerGap(252, Short.MAX_VALUE))
+                .addContainerGap(285, Short.MAX_VALUE))
         );
         jPanelMenuLayout.setVerticalGroup(
             jPanelMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -211,14 +217,14 @@ public final class VtnPrincipalAdmin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonGestionarConferenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGestionarConferenciasActionPerformed
-//        this.objVtnListarArticulos.setVisible(false);
-//        this.objVtnListarConferencias.setVisible(true);
+        this.objVtnListarArticulos.setVisible(false);
+        this.objVtnListarConferencias.setVisible(true);
 //        this.objVtnVerEstadisticas.setVisible(false);
     }//GEN-LAST:event_jButtonGestionarConferenciasActionPerformed
 
     private void jButtonGestionarArticulosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGestionarArticulosActionPerformed
-//        this.objVtnListarConferencias.setVisible(false);
         this.objVtnListarArticulos.setVisible(true);
+        this.objVtnListarConferencias.setVisible(false);
 //        this.objListarOrganizadores.setVisible(false);
 //        this.objVtnVerEstadisticas.setVisible(false);
     }//GEN-LAST:event_jButtonGestionarArticulosActionPerformed
