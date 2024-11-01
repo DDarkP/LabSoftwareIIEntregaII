@@ -84,7 +84,7 @@ public class ArticleService {
         }
     }
 
-    public String[][] getArticles() throws Exception {
+    public String[][] listarArticulos() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(BASE_URL))
                 .GET()
@@ -116,7 +116,7 @@ public class ArticleService {
         }
     }
 
-    public String[][] getArticlesByID(int idArticulo) throws Exception {
+    public String[][] listarArticulosPorID(int idArticulo) throws Exception {
         String URL_CONSULTAR_ARTICULO = "http://localhost:5001/api/articulos/" + idArticulo;
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(URL_CONSULTAR_ARTICULO))
@@ -144,16 +144,15 @@ public class ArticleService {
             throw new Exception("Error al obtener los artículos: " + response.body());
         }
     }
-    
+
     public String updateArticle(Long articleId, String title, String abstractText, String keywords, String pdfFilePath, String userId) throws Exception {
         String json = String.format("{\"name\": \"%s\", \"summary\": \"%s\", \"keywords\": \"%s\", \"filePath\": \"%s\"}",
                 title, abstractText, keywords, pdfFilePath);
 
-        // URL que incluye el userId como parámetro de consulta
-        String urlWithParams = String.format("%s/%d?userId=%s", BASE_URL, articleId, userId);
+        String URL_ACTUALIZAR = "http://localhost:5001/api/articulos/";
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(urlWithParams))
+                .uri(new URI(URL_ACTUALIZAR))
                 .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString(json, StandardCharsets.UTF_8))
                 .build();
@@ -169,10 +168,10 @@ public class ArticleService {
 
     public Boolean deleteArticle(int articleId) throws Exception {
         // URL que incluye el articleId como parte de la ruta
-        String urlWithParams = String.format("%s/%d", BASE_URL, articleId);
+        String URL_DELETE = BASE_URL + "/" + articleId;
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(new URI(urlWithParams))
+                .uri(new URI(URL_DELETE))
                 .DELETE() // Usar el método DELETE
                 .build();
 

@@ -187,7 +187,7 @@ public class ArticleFrame extends JFrame {
 
     private void loadArticles() {
         try {
-            String[][] articles = articleService.getArticles();
+            String[][] articles = articleService.listarArticulos();
             tableModel.setRowCount(0);
 
             for (String[] article : articles) {

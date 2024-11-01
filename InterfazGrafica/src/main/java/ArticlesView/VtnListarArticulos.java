@@ -1,20 +1,16 @@
 package ArticlesView;
 
-import Utilidades.Utilidades;
 import java.awt.Component;
-import java.awt.Desktop;
-import java.io.File;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.SwingUtilities;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 
 public class VtnListarArticulos extends javax.swing.JInternalFrame {
 
@@ -38,6 +34,22 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
         tableModel.addColumn("Estado de Revision");
         tableModel.addColumn("Actualizar");
         tableModel.addColumn("Eliminar");
+
+        // Agregar el MouseListener a la tabla
+        jTableListarArticulos.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    int row = jTableListarArticulos.rowAtPoint(e.getPoint());
+                    if (row >= 0) {
+                        // Selecciona la fila
+                        jTableListarArticulos.setRowSelectionInterval(row, row);
+                        // Muestra el menú contextual
+                        showPopupMenu(e.getComponent(), e.getX(), e.getY(), row);
+                    }
+                }
+            }
+        });
     }
 
     public void limpiarTabla() {
@@ -49,64 +61,80 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
         }
     }
 
-    // Renderer para mostrar el botón en la celda
-    class ButtonRenderer extends JButton implements TableCellRenderer {
+    private void showPopupMenu(Component invoker, int x, int y, int row) {
+        JPopupMenu popupMenu = new JPopupMenu();
 
-        public ButtonRenderer() {
-            setText("Abrir archivo");
-        }
+        JMenuItem updateItem = new JMenuItem("Actualizar");
+        updateItem.addActionListener(e -> llenarCamposVentanaActualizar(row));
+        popupMenu.add(updateItem);
 
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value,
-                boolean isSelected, boolean hasFocus,
-                int row, int column) {
-            return this;
-        }
-    }
-
-    // Editor para manejar el clic del botón
-    class ButtonEditor extends DefaultCellEditor {
-
-        private String pdfPath;
-
-        public ButtonEditor(JCheckBox checkBox) {
-            super(checkBox);
-            JButton button = new JButton("Abrir PDF");
-            button.addActionListener(e -> openPdf(pdfPath)); // Llama al método de abrir PDF
-            this.editorComponent = button;
-        }
-
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value,
-                boolean isSelected, int row, int column) {
-            pdfPath = (String) table.getModel().getValueAt(row, 4); // Obtiene la ruta del PDF de la columna 4
-            return (Component) editorComponent;
-        }
-
-        @Override
-        public Object getCellEditorValue() {
-            return pdfPath;
-        }
-    }
-
-    private void openPdf(String pdfPath) {
-        try {
-            File pdfFile = new File(pdfPath);
-            if (pdfFile.exists()) {
-                Desktop.getDesktop().open(pdfFile);
-            } else {
-                JOptionPane.showMessageDialog(this, "El archivo no existe: " + pdfPath);
+        JMenuItem deleteItem = new JMenuItem("Eliminar");
+        deleteItem.addActionListener(e -> {
+            try {
+                deleteArticle(row);
+            } catch (Exception ex) {
+                Logger.getLogger(VtnListarArticulos.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al abrir el PDF: " + e.getMessage());
-        }
+        });
+        popupMenu.add(deleteItem);
+
+        popupMenu.show(invoker, x, y);
     }
 
+    private void llenarCamposVentanaActualizar(int row) {
+        // Implementa la lógica para actualizar el artículo en la fila especificada
+        // Obtiene los datos del artículo
+//        String articleId = tableModel.getValueAt(row, 0).toString();
+        String articleTitulo = tableModel.getValueAt(row, 1).toString();
+        String articleAutores = tableModel.getValueAt(row, 2).toString();
+        String articleCantidadAutores = tableModel.getValueAt(row, 3).toString();
+//        String articleEstadoRevision = tableModel.getValueAt(row, 4).toString();
+        // Abre la ventana de actualización
+        VtnActualizarArticulo objActualizarArticulo = new VtnActualizarArticulo();
+        objActualizarArticulo.loadArticleData(articleTitulo, articleAutores, articleCantidadAutores);
+        objActualizarArticulo.setVisible(true);
+        
+        String articleId = tableModel.getValueAt(row, 0).toString(); // Obtiene el ID del artículo
+        // Aquí puedes abrir un diálogo o realizar la acción de actualización
+        JOptionPane.showMessageDialog(this, "Actualizar artículo con ID: " + articleId);
+    }
+//    private void updateArticle(int row) {
+//        // Implementa la lógica para actualizar el artículo en la fila especificada
+//        String articleId = tableModel.getValueAt(row, 0).toString(); // Obtiene el ID del artículo
+//        // Aquí puedes abrir un diálogo o realizar la acción de actualización
+//        JOptionPane.showMessageDialog(this, "Actualizar artículo con ID: " + articleId);
+//    }
+    
+    private void deleteArticle(int row) throws Exception {
+        // Implementa la lógica para eliminar el artículo en la fila especificada
+        int articleId = Integer.parseInt(tableModel.getValueAt(row, 0).toString());// Obtiene el ID del artículo
+        // Aquí puedes confirmar la eliminación y luego eliminar el artículo
+        int confirm = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que quieres eliminar el artículo con ID: " + articleId + "?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            // Lógica para eliminar el artículo
+            objArticleService.deleteArticle(articleId);
+            tableModel.removeRow(row); // Elimina la fila de la tabla
+            // Aquí también deberías agregar la lógica para eliminarlo del backend
+        }
+    }
+    
+//    private void deleteArticle(int row) {
+//        // Implementa la lógica para eliminar el artículo en la fila especificada
+//        String articleId = tableModel.getValueAt(row, 0).toString(); // Obtiene el ID del artículo
+//        // Aquí puedes confirmar la eliminación y luego eliminar el artículo
+//        int confirm = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que quieres eliminar el artículo con ID: " + articleId + "?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+//        if (confirm == JOptionPane.YES_OPTION) {
+//            // Lógica para eliminar el artículo
+//            tableModel.removeRow(row); // Elimina la fila de la tabla
+//            // Aquí también deberías agregar la lógica para eliminarlo del backend
+//        }
+//    }
+    
     public void llenarTabla() {
         jTableListarArticulos.setModel(tableModel);
         tableModel.setRowCount(0);
         try {
-            String[][] articles = objArticleService.getArticles();
+            String[][] articles = objArticleService.listarArticulos();
 
             for (String[] article : articles) {
                 Object[] rowData = {
@@ -123,47 +151,41 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
     }
 
     public void llenarTablaById() {
-    // Configuración inicial de la tabla
-    jTableListarArticulos.setModel(tableModel);
-    tableModel.setRowCount(0);  // Limpiar la tabla
+        // Configuración inicial de la tabla
+        jTableListarArticulos.setModel(tableModel);
+        tableModel.setRowCount(0);  // Limpiar la tabla
 
-    try {
-        // Verificar si el campo de texto tiene un valor
-        String idTexto = jTextFieldArticuloID.getText();
-        if (idTexto.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor ingrese un ID de artículo.");
-            return;
+        try {
+            // Verificar si el campo de texto tiene un valor
+            String idTexto = jTextFieldArticuloID.getText();
+            if (idTexto.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Por favor ingrese un ID de artículo.");
+                return;
+            }
+
+            // Convertir el texto a entero para buscar el ID
+            int articuloID = Integer.parseInt(idTexto);
+
+            // Llamar al método para obtener los artículos por ID
+            String[][] articles = objArticleService.listarArticulosPorID(articuloID);
+
+            // Llenar la tabla con los datos obtenidos
+            for (String[] article : articles) {
+                Object[] rowData = {
+                    article[0],
+                    article[1],
+                    article[2],
+                    article[3],
+                    article[4]
+                };
+                tableModel.addRow(rowData);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "El ID debe ser un número válido.");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar los artículos: " + e.getMessage());
         }
-
-        // Convertir el texto a entero para buscar el ID
-        int articuloID = Integer.parseInt(idTexto);
-
-        // Llamar al método para obtener los artículos por ID
-        String[][] articles = objArticleService.getArticlesByID(articuloID);
-
-        // Llenar la tabla con los datos obtenidos
-        for (String[] article : articles) {
-            Object[] rowData = {
-                article[0],
-                article[1],
-                article[2],
-                article[3],
-                article[4]
-            };
-            tableModel.addRow(rowData);
-        }
-
-        // Configuración de la columna para el botón "Abrir PDF" (si se necesita)
-//        jTableListarArticulos.getColumnModel().getColumn(5).setCellRenderer(new ButtonRenderer());
-//        jTableListarArticulos.getColumnModel().getColumn(5).setCellEditor(new ButtonEditor(new JCheckBox()));
-
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "El ID debe ser un número válido.");
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error al cargar los artículos: " + e.getMessage());
     }
-}
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -176,7 +198,7 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableListarArticulos = new javax.swing.JTable();
         jButtonRegistrar = new javax.swing.JButton();
-        jButtonActalizar = new javax.swing.JButton();
+        jButtonRefrescarTabla = new javax.swing.JButton();
         jButtonConsultarArticulo = new javax.swing.JButton();
         jTextFieldArticuloID = new javax.swing.JTextField();
 
@@ -253,12 +275,12 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
             }
         });
 
-        jButtonActalizar.setBackground(new java.awt.Color(0, 102, 153));
-        jButtonActalizar.setForeground(new java.awt.Color(255, 255, 255));
-        jButtonActalizar.setText("Actualizar");
-        jButtonActalizar.addActionListener(new java.awt.event.ActionListener() {
+        jButtonRefrescarTabla.setBackground(new java.awt.Color(0, 102, 153));
+        jButtonRefrescarTabla.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonRefrescarTabla.setText("Refrescar tabla");
+        jButtonRefrescarTabla.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonActalizarActionPerformed(evt);
+                jButtonRefrescarTablaActionPerformed(evt);
             }
         });
 
@@ -291,7 +313,7 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextFieldArticuloID, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(166, 166, 166)
-                        .addComponent(jButtonActalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonRefrescarTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(255, 255, 255)
                         .addComponent(jButtonRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
@@ -303,7 +325,7 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
                 .addGap(19, 19, 19)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButtonConsultarArticulo, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-                    .addComponent(jButtonActalizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonRefrescarTabla, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jTextFieldArticuloID))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -316,9 +338,9 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonActalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActalizarActionPerformed
+    private void jButtonRefrescarTablaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRefrescarTablaActionPerformed
         llenarTabla();
-    }//GEN-LAST:event_jButtonActalizarActionPerformed
+    }//GEN-LAST:event_jButtonRefrescarTablaActionPerformed
 
     private void jButtonRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegistrarActionPerformed
         VtnRegistrarArticulo objVtnRegistrarArticulo = new VtnRegistrarArticulo();
@@ -407,8 +429,8 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonActalizar;
     private javax.swing.JButton jButtonConsultarArticulo;
+    private javax.swing.JButton jButtonRefrescarTabla;
     private javax.swing.JButton jButtonRegistrar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

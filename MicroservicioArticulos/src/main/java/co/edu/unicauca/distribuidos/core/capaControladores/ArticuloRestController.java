@@ -53,7 +53,7 @@ public class ArticuloRestController {
 		return objArticulo;
 	}
 
-	@PutMapping("/Articulos/{id}")
+	@PutMapping("/articulos/{id}")
 	public ArticuloDTO actualizarArticulo(@RequestBody ArticuloDTO articulo, @PathVariable Integer id) {
 		ArticuloDTO objArticulo = null;
 		ArticuloDTO articuloActual = articuloService.findById(id);
@@ -63,7 +63,7 @@ public class ArticuloRestController {
 		return objArticulo;
 	}
 
-	@DeleteMapping("/Articulos/{id}")
+	@DeleteMapping("/articulos/{id}")
 	public Boolean eliminarArticulo(@PathVariable Integer id) {
 		Boolean bandera = false;
 		ArticuloDTO articuloActual = articuloService.findById(id);
