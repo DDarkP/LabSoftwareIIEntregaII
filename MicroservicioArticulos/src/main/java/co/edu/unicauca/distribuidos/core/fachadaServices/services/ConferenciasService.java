@@ -14,32 +14,6 @@ public class ConferenciasService {
     @Autowired
     private WebClient.Builder webClientBuilder;
 
-    /*public List<ArticuloDTO> obtenerArticulosDeConferencias(Integer idConferencia) {
-        String url = "http://localhost:5001/api/articulo/conferencia/" + idConferencia;
-
-        Mono<ArticuloDTO[]> response = webClientBuilder.build()
-                .get()
-                .uri(url)
-                .retrieve()
-                .bodyToMono(ArticuloDTO[].class);
-
-        ArticuloDTO[] ArticulosArray = response.block();
-        return ArticulosArray != null ? List.of(ArticulosArray) : List.of();
-    }
-
-    public List<ArticuloDTO> obtenerConferenciasDeArticuloDTO(Integer idConferencia) {
-        String url = "http://localhost:5001/api/articulo/conferencia/" + idConferencia;
-
-        Mono<ArticuloDTO[]> response = webClientBuilder.build()
-                .get()
-                .uri(url)
-                .retrieve()
-                .bodyToMono(ArticuloDTO[].class);
-
-        ArticuloDTO[] ArticulosArray = response.block();
-        return ArticulosArray != null ? List.of(ArticulosArray) : List.of();
-    }*/
-
     public List<ArticuloDTO> obtenerConferenciasDeArticulo(Integer idArticulo) {
         String url = "http://localhost:5002/api/conferencias/articulos/" + idArticulo;
 

@@ -1,9 +1,9 @@
 package ConferenceView;
 
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class VtnRegistrarConferencia extends javax.swing.JFrame {
 
@@ -28,19 +28,16 @@ public class VtnRegistrarConferencia extends javax.swing.JFrame {
         jPanelInferior = new javax.swing.JPanel();
         jPanelCentral = new javax.swing.JPanel();
         jLabelNombre = new javax.swing.JLabel();
-        jLabelFechaInicio = new javax.swing.JLabel();
-        jLabelFechaFin = new javax.swing.JLabel();
-        jLabelCosto = new javax.swing.JLabel();
+        jLabelCantMax = new javax.swing.JLabel();
         jButtonRegistrar = new javax.swing.JButton();
         jTextFieldNombre = new javax.swing.JTextField();
-        jTextFieldFechaInicio = new javax.swing.JTextField();
-        jTextFieldFechaFin = new javax.swing.JTextField();
-        jTextFieldCosto = new javax.swing.JTextField();
+        jTextFieldCantAutores = new javax.swing.JTextField();
 
+        jPanelSuperior.setBackground(new java.awt.Color(0, 102, 153));
         jPanelSuperior.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabelTitulo.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabelTitulo.setForeground(new java.awt.Color(0, 0, 204));
+        jLabelTitulo.setFont(new java.awt.Font("Roboto Condensed", 1, 24)); // NOI18N
+        jLabelTitulo.setForeground(new java.awt.Color(255, 255, 255));
         jLabelTitulo.setText("Registrar conferencia");
 
         javax.swing.GroupLayout jPanelSuperiorLayout = new javax.swing.GroupLayout(jPanelSuperior);
@@ -48,47 +45,47 @@ public class VtnRegistrarConferencia extends javax.swing.JFrame {
         jPanelSuperiorLayout.setHorizontalGroup(
             jPanelSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelSuperiorLayout.createSequentialGroup()
-                .addContainerGap(186, Short.MAX_VALUE)
-                .addComponent(jLabelTitulo)
-                .addGap(167, 167, 167))
+                .addGap(256, 256, 256)
+                .addComponent(jLabelTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(302, 302, 302))
         );
         jPanelSuperiorLayout.setVerticalGroup(
             jPanelSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelSuperiorLayout.createSequentialGroup()
-                .addContainerGap(43, Short.MAX_VALUE)
-                .addComponent(jLabelTitulo)
-                .addGap(41, 41, 41))
+            .addGroup(jPanelSuperiorLayout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jLabelTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(23, 23, 23))
         );
 
         getContentPane().add(jPanelSuperior, java.awt.BorderLayout.PAGE_START);
 
+        jPanelInferior.setBackground(new java.awt.Color(0, 102, 153));
         jPanelInferior.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout jPanelInferiorLayout = new javax.swing.GroupLayout(jPanelInferior);
         jPanelInferior.setLayout(jPanelInferiorLayout);
         jPanelInferiorLayout.setHorizontalGroup(
             jPanelInferiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 535, Short.MAX_VALUE)
+            .addGap(0, 767, Short.MAX_VALUE)
         );
         jPanelInferiorLayout.setVerticalGroup(
             jPanelInferiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+            .addGap(0, 63, Short.MAX_VALUE)
         );
 
         getContentPane().add(jPanelInferior, java.awt.BorderLayout.PAGE_END);
 
         jPanelCentral.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        jLabelNombre.setFont(new java.awt.Font("Roboto Condensed Light", 0, 18)); // NOI18N
         jLabelNombre.setText("Nombre:");
 
-        jLabelFechaInicio.setText("Fecha Inicio:");
+        jLabelCantMax.setFont(new java.awt.Font("Roboto Condensed Light", 0, 18)); // NOI18N
+        jLabelCantMax.setText("Cantidad Maxima de Articulos:");
 
-        jLabelFechaFin.setText("Fecha Fin:");
-
-        jLabelCosto.setText("Costo:");
-
-        jButtonRegistrar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButtonRegistrar.setForeground(new java.awt.Color(0, 0, 153));
+        jButtonRegistrar.setBackground(new java.awt.Color(0, 102, 153));
+        jButtonRegistrar.setFont(new java.awt.Font("Roboto Condensed Light", 1, 14)); // NOI18N
+        jButtonRegistrar.setForeground(new java.awt.Color(255, 255, 255));
         jButtonRegistrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recursos/grabar.png"))); // NOI18N
         jButtonRegistrar.setText("Registrar");
         jButtonRegistrar.addActionListener(new java.awt.event.ActionListener() {
@@ -97,13 +94,11 @@ public class VtnRegistrarConferencia extends javax.swing.JFrame {
             }
         });
 
+        jTextFieldNombre.setFont(new java.awt.Font("Roboto Condensed Light", 0, 18)); // NOI18N
         jTextFieldNombre.setText("Conferencia 1");
 
-        jTextFieldFechaInicio.setText("25/09/2024");
-
-        jTextFieldFechaFin.setText("24/11/2024");
-
-        jTextFieldCosto.setText("100");
+        jTextFieldCantAutores.setFont(new java.awt.Font("Roboto Condensed Light", 0, 18)); // NOI18N
+        jTextFieldCantAutores.setText("3");
 
         javax.swing.GroupLayout jPanelCentralLayout = new javax.swing.GroupLayout(jPanelCentral);
         jPanelCentral.setLayout(jPanelCentralLayout);
@@ -112,45 +107,40 @@ public class VtnRegistrarConferencia extends javax.swing.JFrame {
             .addGroup(jPanelCentralLayout.createSequentialGroup()
                 .addGap(110, 110, 110)
                 .addGroup(jPanelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabelCosto)
-                    .addComponent(jLabelFechaFin)
-                    .addComponent(jLabelFechaInicio)
-                    .addComponent(jLabelNombre))
-                .addGap(70, 70, 70)
+                    .addComponent(jLabelCantMax, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanelCentralLayout.createSequentialGroup()
+                        .addGap(156, 156, 156)
+                        .addComponent(jLabelNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(27, 27, 27)
                 .addGroup(jPanelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jTextFieldNombre)
-                        .addComponent(jTextFieldFechaInicio)
-                        .addComponent(jTextFieldCosto, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE))
-                    .addComponent(jTextFieldFechaFin, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(163, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelCentralLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButtonRegistrar)
-                .addGap(31, 31, 31))
+                    .addComponent(jTextFieldNombre)
+                    .addComponent(jTextFieldCantAutores, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE))
+                .addGap(32, 32, 32)
+                .addComponent(jButtonRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(141, 141, 141))
         );
         jPanelCentralLayout.setVerticalGroup(
             jPanelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelCentralLayout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addGroup(jPanelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabelNombre)
-                    .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
-                .addGroup(jPanelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelFechaInicio)
-                    .addComponent(jTextFieldFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
-                .addGroup(jPanelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelFechaFin)
-                    .addComponent(jTextFieldFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addGroup(jPanelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelCosto)
-                    .addComponent(jTextFieldCosto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
-                .addComponent(jButtonRegistrar)
-                .addGap(25, 25, 25))
+                .addGroup(jPanelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelCentralLayout.createSequentialGroup()
+                        .addGap(49, 49, 49)
+                        .addGroup(jPanelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanelCentralLayout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabelNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanelCentralLayout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabelCantMax, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jTextFieldCantAutores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanelCentralLayout.createSequentialGroup()
+                        .addGap(63, 63, 63)
+                        .addComponent(jButtonRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(16, 16, 16)))
+                .addGap(80, 80, 80))
         );
 
         getContentPane().add(jPanelCentral, java.awt.BorderLayout.CENTER);
@@ -159,59 +149,26 @@ public class VtnRegistrarConferencia extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegistrarActionPerformed
-//        String nombre, fechaInicio, fechaFin, costo;
-//        Date fechaInicioDate = null, fechaFinDate = null;
-//        float costoInscripcion;
-//        boolean bandera;
-//
-//        nombre = this.jTextFieldNombre.getText();
-//        fechaInicio = this.jTextFieldFechaInicio.getText();
-//        fechaFin = this.jTextFieldFechaFin.getText();
-//        costo = this.jTextFieldCosto.getText();
-//
-//        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-//        try {
-//            fechaInicioDate = formatter.parse(fechaInicio);
-//
-//            try {
-//                fechaFinDate = formatter.parse(fechaFin);
-//
-//                costoInscripcion = Float.parseFloat(costo);
-//
-//                Conferencia objConferencia = new Conferencia(nombre, fechaInicioDate, fechaFinDate, costoInscripcion);
-//
-//                bandera = this.objServicioAlmacenamiento.almacenarConferencia(objConferencia);
-//
-//                if (bandera) {
-//                    Utilidades.mensajeExito("El registro de la conferencia fue exitoso", "Registro exitoso");
-//                } else {
-//                    Utilidades.mensajeError("El registro de la conferencia no se realizo", "Error en el registro");
-//                }
-//
-//            } catch (ParseException ex) {
-//                Utilidades.mensajeAdvertencia("La fecha de fin no sigue el formato dd/MM/yyyy", "Fecha incorrecta");
-//            }
-//
-//        } catch (ParseException ex) {
-//            Utilidades.mensajeAdvertencia("La fecha de inicio no sigue el formato dd/MM/yyyy", "Fecha incorrecta");
-//        }
-//        dispose();
+        String nombreConferencia = jTextFieldNombre.getText();
+        int cantidadAutores = Integer.parseInt(jTextFieldCantAutores.getText());
+
+        try {
+            objConferenceService.createConference(nombreConferencia, cantidadAutores);
+        } catch (Exception ex) {
+            Logger.getLogger(VtnRegistrarConferencia.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButtonRegistrarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonRegistrar;
-    private javax.swing.JLabel jLabelCosto;
-    private javax.swing.JLabel jLabelFechaFin;
-    private javax.swing.JLabel jLabelFechaInicio;
+    private javax.swing.JLabel jLabelCantMax;
     private javax.swing.JLabel jLabelNombre;
     private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JPanel jPanelCentral;
     private javax.swing.JPanel jPanelInferior;
     private javax.swing.JPanel jPanelSuperior;
-    private javax.swing.JTextField jTextFieldCosto;
-    private javax.swing.JTextField jTextFieldFechaFin;
-    private javax.swing.JTextField jTextFieldFechaInicio;
+    private javax.swing.JTextField jTextFieldCantAutores;
     private javax.swing.JTextField jTextFieldNombre;
     // End of variables declaration//GEN-END:variables
 }

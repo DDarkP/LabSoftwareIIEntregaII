@@ -152,20 +152,20 @@ public class ConferenceFrame extends JFrame {
     }
 
     private void createConference() {
-        try {
-            String name = nameField.getText();
-            String location = locationField.getText();
-            String startDate = new SimpleDateFormat("yyyy-MM-dd").format(startDateChooser.getDate()); // Obtener la fecha como String
-            String endDate = new SimpleDateFormat("yyyy-MM-dd").format(endDateChooser.getDate()); // Obtener la fecha como String
-            String topics = topicsField.getText();
-
-            String result = conferenceService.createConference(name, location, startDate, endDate, topics, organizerId);
-            JOptionPane.showMessageDialog(this, result);
-            clearFields(); // Limpiar campos después de crear
-            listConferences(); // Actualizar la tabla
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-        }
+//        try {
+//            String name = nameField.getText();
+//            String location = locationField.getText();
+//            String startDate = new SimpleDateFormat("yyyy-MM-dd").format(startDateChooser.getDate()); // Obtener la fecha como String
+//            String endDate = new SimpleDateFormat("yyyy-MM-dd").format(endDateChooser.getDate()); // Obtener la fecha como String
+//            String topics = topicsField.getText();
+//
+//            String result = conferenceService.createConference(name, location, startDate, endDate, topics, organizerId);
+//            JOptionPane.showMessageDialog(this, result);
+//            clearFields(); // Limpiar campos después de crear
+//            listConferences(); // Actualizar la tabla
+//        } catch (Exception e) {
+//            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+//        }
     }
 
     private void listConferences() {

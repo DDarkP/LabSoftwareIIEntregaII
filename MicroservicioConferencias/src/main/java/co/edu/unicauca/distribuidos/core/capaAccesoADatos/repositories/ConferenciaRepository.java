@@ -96,17 +96,17 @@ public class ConferenciaRepository {
 		ArticuloEntity objArticuloEntity3 = new ArticuloEntity(3, "Articulo ingenieria");
 		ArticuloEntity objArticuloEntity4 = new ArticuloEntity(4, "Articulo Investigacion");
 
-		ConferenciaEntity objConferencia1 = new ConferenciaEntity(1, "Conferencia Sistemas", 2);
+		ConferenciaEntity objConferencia1 = new ConferenciaEntity("Conferencia Sistemas", 2);
 		objConferencia1.agregarArticulo(objArticuloEntity1);
 		objConferencia1.agregarArticulo(objArticuloEntity4);
 		this.listaDeConferencias.add(objConferencia1);
 
-		ConferenciaEntity objConferencia2 = new ConferenciaEntity(2, "Conferencia IA", 5);
+		ConferenciaEntity objConferencia2 = new ConferenciaEntity("Conferencia IA", 5);
 		objConferencia2.agregarArticulo(objArticuloEntity2);
 		objConferencia2.agregarArticulo(objArticuloEntity3);
 		this.listaDeConferencias.add(objConferencia2);
 
-		ConferenciaEntity objConferencia3 = new ConferenciaEntity(3, "Conferencia Ingenieria", 3);
+		ConferenciaEntity objConferencia3 = new ConferenciaEntity("Conferencia Ingenieria", 3);
 		objConferencia3.agregarArticulo(objArticuloEntity2);
 		this.listaDeConferencias.add(objConferencia3);
 	}

@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ArticuloDTO {
+	private static int idCounter = 0; // Variable estática para contar IDs
 	private Integer id;
 	private String nombre;
 	private String autores;
@@ -15,6 +16,6 @@ public class ArticuloDTO {
 	private String revista;
 
 	public ArticuloDTO() {
-
+		this.id = ++idCounter; // Asigna el ID autoincremental
 	}
 }

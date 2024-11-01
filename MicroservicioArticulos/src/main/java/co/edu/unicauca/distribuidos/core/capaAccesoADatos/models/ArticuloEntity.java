@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ArticuloEntity {
+	private static int idCounter = 0; // Variable estática para contar IDs
 	private Integer id;
 	private String nombre;
 	private String autores;
@@ -15,6 +16,6 @@ public class ArticuloEntity {
 	private String revista;
 
 	public ArticuloEntity() {
-
+        this.id = ++idCounter; // Asigna el ID autoincremental
 	}
 }

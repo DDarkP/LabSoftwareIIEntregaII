@@ -11,12 +11,13 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ConferenciaDTO {
-	private Integer id;
+	private static int idCounter = 0; // Variable estática para contar IDs
+    private int id;
 	private String nombreConferencia;
-	private List<ArticuloEntity> articulos;
-	private Integer cantidadMAxArt;
+	//private List<ArticuloEntity> articulos;
+	private Integer cantidadMaxArt;
 
 	public ConferenciaDTO() {
-
+		this.id = ++idCounter; // Asigna el ID autoincremental
 	}
 }

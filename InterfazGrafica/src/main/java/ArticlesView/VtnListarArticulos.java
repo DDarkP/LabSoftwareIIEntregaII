@@ -32,9 +32,8 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
         tableModel.addColumn("Id");
         tableModel.addColumn("Titulo");
         tableModel.addColumn("Autores");
-        tableModel.addColumn("Conferencia");
+        tableModel.addColumn("Cantidad Autores");
         tableModel.addColumn("Estado de Revision");
-        tableModel.addColumn("Archivo");
         tableModel.addColumn("Actualizar");
         tableModel.addColumn("Eliminar");
     }
@@ -115,14 +114,14 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
                     article[2],
                     article[3],
                     article[4],
-                    "Abrir PDF", // Texto del botón en la última columna                    
+//                    "Abrir PDF", // Texto del botón en la última columna                    
                 };
                 tableModel.addRow(rowData);
             }
 
             // Agregar un botón en la columna de "Abrir PDF"
-            jTableListarArticulos.getColumnModel().getColumn(5).setCellRenderer((TableCellRenderer) new ButtonRenderer());
-            jTableListarArticulos.getColumnModel().getColumn(5).setCellEditor(new ButtonEditor(new JCheckBox()));
+//            jTableListarArticulos.getColumnModel().getColumn(5).setCellRenderer((TableCellRenderer) new ButtonRenderer());
+//            jTableListarArticulos.getColumnModel().getColumn(5).setCellEditor(new ButtonEditor(new JCheckBox()));
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al cargar los artículos: " + e.getMessage());
@@ -141,9 +140,11 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
         jButtonRegistrar = new javax.swing.JButton();
         jButtonActalizar = new javax.swing.JButton();
 
+        jPanel1.setBackground(new java.awt.Color(0, 102, 153));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel1.setFont(new java.awt.Font("Roboto Condensed", 1, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Roboto Condensed", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Gestionar articulos");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -151,20 +152,21 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(215, 215, 215)
-                .addComponent(jLabel1)
-                .addContainerGap(232, Short.MAX_VALUE))
+                .addGap(345, 345, 345)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(423, 423, 423))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
+                .addGap(17, 17, 17)
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(15, 15, 15))
+                .addGap(14, 14, 14))
         );
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
+        jPanel2.setBackground(new java.awt.Color(0, 102, 153));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel2.setForeground(new java.awt.Color(0, 0, 153));
 
@@ -172,7 +174,7 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 586, Short.MAX_VALUE)
+            .addGap(0, 953, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -202,6 +204,8 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(jTableListarArticulos);
 
+        jButtonRegistrar.setBackground(new java.awt.Color(0, 102, 153));
+        jButtonRegistrar.setForeground(new java.awt.Color(255, 255, 255));
         jButtonRegistrar.setText("Registrar");
         jButtonRegistrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -209,6 +213,8 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
             }
         });
 
+        jButtonActalizar.setBackground(new java.awt.Color(0, 102, 153));
+        jButtonActalizar.setForeground(new java.awt.Color(255, 255, 255));
         jButtonActalizar.setText("Actualizar");
         jButtonActalizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -225,21 +231,21 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addGap(76, 76, 76))
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(109, 109, 109)
-                .addComponent(jButtonActalizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(198, 198, 198)
-                .addComponent(jButtonRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(119, 119, 119))
+                .addGap(196, 196, 196)
+                .addComponent(jButtonActalizar, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
+                .addGap(272, 272, 272)
+                .addComponent(jButtonRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
+                .addGap(265, 265, 265))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonActalizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(28, 28, 28)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+                    .addComponent(jButtonRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                    .addComponent(jButtonActalizar, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
                 .addGap(24, 24, 24))
         );
 

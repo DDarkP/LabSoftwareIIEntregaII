@@ -11,21 +11,22 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ConferenciaEntity {
+    private static int idCounter = 0; // Variable estática para contar IDs
 	private Integer id;
 	private String nombre;
 	private List<ArticuloEntity> articulos;
-	private Integer cantidadMAxArt;
+	private Integer cantidadMaxArt;
 
-    public ConferenciaEntity(int id, String nombre, int cantidadMAxArt) {
-        this.id = id;
+    public ConferenciaEntity(String nombre, int cantidadMAxArt) {
+        this.id = ++idCounter; // Asigna el ID autoincremental
         this.nombre = nombre;
-        this.cantidadMAxArt = cantidadMAxArt;
+        this.cantidadMaxArt = cantidadMAxArt;
         this.articulos = new ArrayList<>(); // Inicialización de la lista de artículos
     }
 
 	// Método para agregar un artículo a la conferencia
     public void agregarArticulo(ArticuloEntity articulo) {
-        if (articulos.size() < cantidadMAxArt) {
+        if (articulos.size() < cantidadMaxArt) {
             articulos.add(articulo);
         } else {
             System.out.println("No se pueden agregar más artículos, tope alcanzado.");
