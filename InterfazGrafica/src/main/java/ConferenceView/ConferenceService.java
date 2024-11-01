@@ -32,9 +32,8 @@ public class ConferenceService {
     public void createConference(String nombreConferencia, int cantMaxArticulos) throws Exception {
         HttpClient cliente = HttpClient.newHttpClient();
         ObjectMapper object_Mapper = new ObjectMapper();
-        
+
 //        HttpClient client = HttpClient.newHttpClient();
-        
         //obtener conferencias asociadas al articulo
 //        try {
 //            HttpRequest request = HttpRequest.newBuilder()
@@ -57,12 +56,11 @@ public class ConferenceService {
 //            }
 //        } catch (IOException | InterruptedException | URISyntaxException e) {
 //        }
-
         // Crear un mapa para los datos de la conferencia
         Map<String, Object> conferenceData = Map.of(
                 "nombreConferencia", nombreConferencia,
                 "cantidadMaxArticulos", cantMaxArticulos
-//                "articulos", articulos // Puede ser una lista vacía si no tienes artículos
+        //                "articulos", articulos // Puede ser una lista vacía si no tienes artículos
         );
 
         try {
@@ -87,7 +85,7 @@ public class ConferenceService {
             throw new Exception("Error al crear la conferencia: " + ex.getMessage(), ex);
         }
     }
-    
+
     public String[][] getConferences() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(BASE_URL))
@@ -100,56 +98,43 @@ public class ConferenceService {
             JsonElement jsonElement = JsonParser.parseString(response.body());
             JsonArray jsonArray = jsonElement.getAsJsonArray();
 
-            // Aumenta el tamaño a 6 columnas para incluir el ID
-            String[][] data = new String[jsonArray.size()][3];
+            // numero de columnas en el json
+            String[][] data = new String[jsonArray.size()][4];
 
             for (int i = 0; i < jsonArray.size(); i++) {
                 JsonElement element = jsonArray.get(i);
+
+                System.out.println(element);
                 // Incluye el ID en la primera columna
                 data[i][0] = element.getAsJsonObject().get("id").getAsString();
                 data[i][1] = element.getAsJsonObject().get("nombreConferencia").getAsString();
-                data[i][2] = element.getAsJsonObject().get("cantidadMaxArt").getAsString();
-            }
 
+                // Suponiendo que `element` es un JsonObject que contiene la conferencia
+                JsonArray articulosArray = element.getAsJsonObject().getAsJsonArray("articulos");
+
+                // Construir una cadena con los nombres de los artículos, por ejemplo
+                StringBuilder nombresArticulos = new StringBuilder();
+
+                for (JsonElement articuloElement : articulosArray) {
+                    JsonObject articuloObj = articuloElement.getAsJsonObject();
+                    int id = articuloObj.get("id").getAsInt();
+                    String nombre = articuloObj.get("nombre").getAsString();
+                    // Agregar el nombre del artículo a la cadena
+                    nombresArticulos.append(nombre).append(", ");
+                }
+                // Remover la última coma y espacio si hay artículos
+                if (nombresArticulos.length() > 0) {
+                    nombresArticulos.setLength(nombresArticulos.length() - 2);
+                }
+                // Asignar la cadena resultante (con los nombres de los artículos) a tu estructura de datos
+                data[i][2] = nombresArticulos.toString();
+                data[i][3] = element.getAsJsonObject().get("cantidadMaxArt").getAsString();
+            }
             return data;
         } else {
             throw new Exception("Error al obtener las conferencias: " + response.body());
         }
     }
-
-//    public String[][] getConferences() throws Exception {
-//        HttpRequest request = HttpRequest.newBuilder()
-//                .uri(new URI(BASE_URL))
-//                .GET()
-//                .build();
-//
-//        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-//
-//        if (response.statusCode() == 200) {
-//            JsonElement jsonElement = JsonParser.parseString(response.body());
-//            JsonArray jsonArray = jsonElement.getAsJsonArray();
-//
-//            // Ajusta el tamaño de la matriz de acuerdo a los campos que necesitas mostrar
-//            String[][] data = new String[jsonArray.size()][4];
-//            for (int i = 0; i < jsonArray.size(); i++) {
-//                System.out.println("Número de conferencias: " + jsonArray.size());
-//                JsonElement element = jsonArray.get(i);
-//                JsonObject jsonObject = element.getAsJsonObject();
-//
-//                //System.out.println(jsonObject);
-//                // Verifica si cada campo existe y no es null antes de asignar
-//                data[i][0] = jsonObject.has("id") && !jsonObject.get("id").isJsonNull() ? jsonObject.get("id").getAsString() : "N/A"; // Cambia a un valor predeterminado
-//                data[i][1] = jsonObject.has("nombreConferencia") && !jsonObject.get("nombreConferencia").isJsonNull() ? jsonObject.get("nombreConferencia").getAsString() : "N/A";
-//                data[i][2] = jsonObject.has("articulos") && !jsonObject.get("articulos").isJsonNull() ? jsonObject.get("articulos").getAsString() : "N/A";
-//                data[i][3] = jsonObject.has("cantidadMaxArt") && !jsonObject.get("cantidadMaxArt").isJsonNull() ? jsonObject.get("cantidadMaxArt").getAsString() : "N/A";
-//                System.out.println(data[i][3]);
-//            }
-//            System.out.println(Arrays.toString(data));
-//            return data;
-//        } else {
-//            throw new Exception("Error al obtener las conferencias: " + response.body());
-//        }
-//    }
 
     public String updateConference(Long conferenceId, String name, String location, String startDate, String endDate, String topics, String userId) throws Exception {
         String json = String.format("{\"name\": \"%s\", \"location\": \"%s\", \"startDate\": \"%s\", \"endDate\": \"%s\", \"topics\": \"%s\"}",

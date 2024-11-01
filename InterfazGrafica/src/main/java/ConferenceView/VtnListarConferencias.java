@@ -67,7 +67,7 @@ public class VtnListarConferencias extends javax.swing.JInternalFrame {
                     conferencia[0],
                     conferencia[1],
                     conferencia[2],
-//                    conferencia[3]
+                    conferencia[3]
                 };
                 tableModel.addRow(rowData);
             }

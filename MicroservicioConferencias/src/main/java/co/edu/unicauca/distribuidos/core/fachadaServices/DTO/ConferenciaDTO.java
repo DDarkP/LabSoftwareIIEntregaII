@@ -14,7 +14,7 @@ public class ConferenciaDTO {
 	private static int idCounter = 0; // Variable estática para contar IDs
     private int id;
 	private String nombreConferencia;
-	//private List<ArticuloEntity> articulos;
+	private List<ArticuloEntity> articulos;
 	private Integer cantidadMaxArt;
 
 	public ConferenciaDTO() {
