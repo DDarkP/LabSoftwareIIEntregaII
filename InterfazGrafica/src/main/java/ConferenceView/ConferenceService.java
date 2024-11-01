@@ -20,51 +20,26 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 public class ConferenceService {
 
     private static final String BASE_URL = "http://localhost:5002/api/conferencias";
-    private HttpClient client = HttpClient.newHttpClient();
+    private final HttpClient client = HttpClient.newHttpClient();
 
     public void createConference(String nombreConferencia, int cantMaxArticulos) throws Exception {
+
         HttpClient cliente = HttpClient.newHttpClient();
         ObjectMapper object_Mapper = new ObjectMapper();
 
-//        HttpClient client = HttpClient.newHttpClient();
-        //obtener conferencias asociadas al articulo
-//        try {
-//            HttpRequest request = HttpRequest.newBuilder()
-//                    .uri(new URI("http://localhost:5002/api/conferencias")) // Ajusta la URL según tu configuración
-//                    .GET()
-//                    .build();
-//
-//            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-//
-//            if (response.statusCode() == 200) {
-//                JsonElement jsonElement = JsonParser.parseString(response.body());
-//                JsonArray jsonArray = jsonElement.getAsJsonArray();
-//
-//                for (JsonElement element : jsonArray) {
-//                    String nombreConferencia = element.getAsJsonObject().get("nombreConferencia").getAsString();
-//                    comboBox.addItem(nombreConferencia); // Agregar cada nombre al comboBox
-//                }
-//            } else {
-//                System.out.println("Error al obtener las conferencias: " + response.statusCode());
-//            }
-//        } catch (IOException | InterruptedException | URISyntaxException e) {
-//        }
-        // Crear un mapa para los datos de la conferencia
-        Map<String, Object> conferenceData = Map.of(
+        Map<String, Object> articleData = Map.of(
                 "nombreConferencia", nombreConferencia,
-                "cantidadMaxArticulos", cantMaxArticulos
-        //                "articulos", articulos // Puede ser una lista vacía si no tienes artículos
+                "articulos", "dsda",
+                "cantidadMaxArt", cantMaxArticulos
         );
 
         try {
-            String json = object_Mapper.writeValueAsString(conferenceData);
+            String json = object_Mapper.writeValueAsString(articleData);
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(BASE_URL)) // Ajusta la URL
@@ -75,15 +50,14 @@ public class ConferenceService {
             HttpResponse<String> response = cliente.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
+                System.out.println("Conferencia creada: " + response.body());
                 Utilidades.mensajeExito("El registro de la conferencia fue exitoso", "Registro exitoso");
             } else {
-                Utilidades.mensajeError("El registro de la conferencia no se realizó", "Error en el registro");
-                throw new Exception("Error al crear la conferencia: " + response.body());
+                System.out.println("Error al crear la conferencia: " + response.statusCode());
+                Utilidades.mensajeError("El registro de la conferencia no se realizo", "Error en el registro");
             }
         } catch (IOException | InterruptedException ex) {
-            // Manejar excepciones
-            throw new Exception("Error al crear la conferencia: " + ex.getMessage(), ex);
-        }
+        }        
     }
 
     public String[][] getConferences() throws Exception {
@@ -120,7 +94,8 @@ public class ConferenceService {
                     int id = articuloObj.get("id").getAsInt();
                     String nombre = articuloObj.get("nombre").getAsString();
                     // Agregar el nombre del artículo a la cadena
-                    nombresArticulos.append(nombre).append(", ");
+//                    nombresArticulos.append(nombre).append(", ");
+                    nombresArticulos.append("[id: ").append(id).append("] ").append(nombre).append(", ");
                 }
                 // Remover la última coma y espacio si hay artículos
                 if (nombresArticulos.length() > 0) {

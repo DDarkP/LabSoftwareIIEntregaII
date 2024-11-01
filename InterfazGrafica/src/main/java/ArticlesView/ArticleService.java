@@ -116,6 +116,35 @@ public class ArticleService {
         }
     }
 
+    public String[][] getArticlesByID(int idArticulo) throws Exception {
+        String URL_CONSULTAR_ARTICULO = "http://localhost:5001/api/articulos/" + idArticulo;
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI(URL_CONSULTAR_ARTICULO))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200) {
+            JsonElement jsonElement = JsonParser.parseString(response.body());
+
+            // Inicializa la matriz para un único artículo
+            String[][] data = new String[1][5];
+            JsonObject jsonObject = jsonElement.getAsJsonObject();
+
+            // Asigna los valores a la matriz
+            data[0][0] = jsonObject.has("id") && !jsonObject.get("id").isJsonNull() ? jsonObject.get("id").getAsString() : "N/A";
+            data[0][1] = jsonObject.has("nombre") && !jsonObject.get("nombre").isJsonNull() ? jsonObject.get("nombre").getAsString() : "N/A";
+            data[0][2] = jsonObject.has("autores") && !jsonObject.get("autores").isJsonNull() ? jsonObject.get("autores").getAsString() : "N/A";
+            data[0][3] = jsonObject.has("cantidadAutores") && !jsonObject.get("cantidadAutores").isJsonNull() ? jsonObject.get("cantidadAutores").getAsString() : "N/A";
+            data[0][4] = jsonObject.has("revista") && !jsonObject.get("revista").isJsonNull() ? jsonObject.get("revista").getAsString() : "N/A";
+
+            return data;
+        } else {
+            throw new Exception("Error al obtener los artículos: " + response.body());
+        }
+    }
+    
     public String updateArticle(Long articleId, String title, String abstractText, String keywords, String pdfFilePath, String userId) throws Exception {
         String json = String.format("{\"name\": \"%s\", \"summary\": \"%s\", \"keywords\": \"%s\", \"filePath\": \"%s\"}",
                 title, abstractText, keywords, pdfFilePath);

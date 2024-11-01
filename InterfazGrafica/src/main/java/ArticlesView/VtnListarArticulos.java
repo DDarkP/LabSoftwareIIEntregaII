@@ -11,6 +11,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
@@ -37,7 +39,7 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
         tableModel.addColumn("Actualizar");
         tableModel.addColumn("Eliminar");
     }
-    
+
     public void limpiarTabla() {
 
         DefaultTableModel modelo = (DefaultTableModel) this.jTableListarArticulos.getModel();
@@ -100,12 +102,11 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
         }
     }
 
-     
     public void llenarTabla() {
+        jTableListarArticulos.setModel(tableModel);
+        tableModel.setRowCount(0);
         try {
-            jTableListarArticulos.setModel(tableModel);
             String[][] articles = objArticleService.getArticles();
-            tableModel.setRowCount(0);
 
             for (String[] article : articles) {
                 Object[] rowData = {
@@ -113,20 +114,57 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
                     article[1],
                     article[2],
                     article[3],
-                    article[4],
-//                    "Abrir PDF", // Texto del botón en la última columna                    
-                };
+                    article[4],};
                 tableModel.addRow(rowData);
             }
-
-            // Agregar un botón en la columna de "Abrir PDF"
-//            jTableListarArticulos.getColumnModel().getColumn(5).setCellRenderer((TableCellRenderer) new ButtonRenderer());
-//            jTableListarArticulos.getColumnModel().getColumn(5).setCellEditor(new ButtonEditor(new JCheckBox()));
-
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al cargar los artículos: " + e.getMessage());
         }
     }
+
+    public void llenarTablaById() {
+    // Configuración inicial de la tabla
+    jTableListarArticulos.setModel(tableModel);
+    tableModel.setRowCount(0);  // Limpiar la tabla
+
+    try {
+        // Verificar si el campo de texto tiene un valor
+        String idTexto = jTextFieldArticuloID.getText();
+        if (idTexto.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor ingrese un ID de artículo.");
+            return;
+        }
+
+        // Convertir el texto a entero para buscar el ID
+        int articuloID = Integer.parseInt(idTexto);
+
+        // Llamar al método para obtener los artículos por ID
+        String[][] articles = objArticleService.getArticlesByID(articuloID);
+
+        // Llenar la tabla con los datos obtenidos
+        for (String[] article : articles) {
+            Object[] rowData = {
+                article[0],
+                article[1],
+                article[2],
+                article[3],
+                article[4]
+            };
+            tableModel.addRow(rowData);
+        }
+
+        // Configuración de la columna para el botón "Abrir PDF" (si se necesita)
+//        jTableListarArticulos.getColumnModel().getColumn(5).setCellRenderer(new ButtonRenderer());
+//        jTableListarArticulos.getColumnModel().getColumn(5).setCellEditor(new ButtonEditor(new JCheckBox()));
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "El ID debe ser un número válido.");
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al cargar los artículos: " + e.getMessage());
+    }
+}
+
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -139,6 +177,8 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
         jTableListarArticulos = new javax.swing.JTable();
         jButtonRegistrar = new javax.swing.JButton();
         jButtonActalizar = new javax.swing.JButton();
+        jButtonConsultarArticulo = new javax.swing.JButton();
+        jTextFieldArticuloID = new javax.swing.JTextField();
 
         jPanel1.setBackground(new java.awt.Color(0, 102, 153));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -222,30 +262,52 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
             }
         });
 
+        jButtonConsultarArticulo.setBackground(new java.awt.Color(0, 102, 153));
+        jButtonConsultarArticulo.setForeground(new java.awt.Color(255, 255, 255));
+        jButtonConsultarArticulo.setText("Consultar por ID");
+        jButtonConsultarArticulo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonConsultarArticuloActionPerformed(evt);
+            }
+        });
+
+        jTextFieldArticuloID.setFont(new java.awt.Font("Roboto Light", 2, 12)); // NOI18N
+        jTextFieldArticuloID.setToolTipText("");
+        jTextFieldArticuloID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldArticuloIDActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(74, 74, 74)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jButtonConsultarArticulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldArticuloID, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(166, 166, 166)
+                        .addComponent(jButtonActalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(255, 255, 255)
+                        .addComponent(jButtonRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(76, 76, 76))
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(196, 196, 196)
-                .addComponent(jButtonActalizar, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                .addGap(272, 272, 272)
-                .addComponent(jButtonRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
-                .addGap(265, 265, 265))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-                    .addComponent(jButtonActalizar, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButtonConsultarArticulo, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                    .addComponent(jButtonActalizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTextFieldArticuloID))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
                 .addGap(24, 24, 24))
         );
 
@@ -335,9 +397,18 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
 //        }
     }//GEN-LAST:event_jTableListarArticulosMouseClicked
 
+    private void jButtonConsultarArticuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConsultarArticuloActionPerformed
+        llenarTablaById();
+    }//GEN-LAST:event_jButtonConsultarArticuloActionPerformed
+
+    private void jTextFieldArticuloIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldArticuloIDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldArticuloIDActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonActalizar;
+    private javax.swing.JButton jButtonConsultarArticulo;
     private javax.swing.JButton jButtonRegistrar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
@@ -345,5 +416,6 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableListarArticulos;
+    private javax.swing.JTextField jTextFieldArticuloID;
     // End of variables declaration//GEN-END:variables
 }
