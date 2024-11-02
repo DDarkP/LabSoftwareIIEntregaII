@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JMenuItem;
@@ -32,8 +33,6 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
         tableModel.addColumn("Autores");
         tableModel.addColumn("Cantidad Autores");
         tableModel.addColumn("Estado de Revision");
-        tableModel.addColumn("Actualizar");
-        tableModel.addColumn("Eliminar");
 
         // Agregar el MouseListener a la tabla
         jTableListarArticulos.addMouseListener(new MouseAdapter() {
@@ -82,9 +81,6 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
     }
 
     private void llenarCamposVentanaActualizar(int row) {
-        // Implementa la lógica para actualizar el artículo en la fila especificada
-        // Obtiene los datos del artículo
-//        String articleId = tableModel.getValueAt(row, 0).toString();
         String articleTitulo = tableModel.getValueAt(row, 1).toString();
         String articleAutores = tableModel.getValueAt(row, 2).toString();
         String articleCantidadAutores = tableModel.getValueAt(row, 3).toString();
@@ -117,19 +113,7 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
             // Aquí también deberías agregar la lógica para eliminarlo del backend
         }
     }
-    
-//    private void deleteArticle(int row) {
-//        // Implementa la lógica para eliminar el artículo en la fila especificada
-//        String articleId = tableModel.getValueAt(row, 0).toString(); // Obtiene el ID del artículo
-//        // Aquí puedes confirmar la eliminación y luego eliminar el artículo
-//        int confirm = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que quieres eliminar el artículo con ID: " + articleId + "?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
-//        if (confirm == JOptionPane.YES_OPTION) {
-//            // Lógica para eliminar el artículo
-//            tableModel.removeRow(row); // Elimina la fila de la tabla
-//            // Aquí también deberías agregar la lógica para eliminarlo del backend
-//        }
-//    }
-    
+        
     public void llenarTabla() {
         jTableListarArticulos.setModel(tableModel);
         tableModel.setRowCount(0);
@@ -259,11 +243,6 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jTableListarArticulos.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTableListarArticulosMouseClicked(evt);
-            }
-        });
         jScrollPane1.setViewportView(jTableListarArticulos);
 
         jButtonRegistrar.setBackground(new java.awt.Color(0, 102, 153));
@@ -343,81 +322,14 @@ public class VtnListarArticulos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButtonRefrescarTablaActionPerformed
 
     private void jButtonRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegistrarActionPerformed
-        VtnRegistrarArticulo objVtnRegistrarArticulo = new VtnRegistrarArticulo();
-        objVtnRegistrarArticulo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        objVtnRegistrarArticulo.setVisible(true);
+        try {
+            VtnRegistrarArticulo objVtnRegistrarArticulo = new VtnRegistrarArticulo();
+            objVtnRegistrarArticulo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            objVtnRegistrarArticulo.setVisible(true);
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(VtnListarArticulos.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButtonRegistrarActionPerformed
-
-    private void jTableListarArticulosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableListarArticulosMouseClicked
-
-//        int column = this.jTableListarArticulos.getColumnModel().getColumnIndexAtX(evt.getX());
-//        int row = evt.getY() / jTableListarArticulos.getRowHeight();
-//
-//        if (row < jTableListarArticulos.getRowCount() && row >= 0 && column < jTableListarArticulos.getColumnCount() && column >= 0) {
-//            Object value = jTableListarArticulos.getValueAt(row, column);
-//
-//            if (value instanceof JButton) {
-//                ((JButton) value).doClick();
-//                JButton boton = (JButton) value;
-//
-//                String idArticulo = jTableListarArticulos.getValueAt(row, 0).toString();
-//                int idArticuloConvertido = Integer.parseInt(idArticulo);
-//
-//                if (boton.getName().equals("Eliminar")) {
-//                    try {
-//                        if (Utilidades.mensajeConfirmacion("¿Estás seguro de que quieres eliminar el artículo con identificador " + idArticulo + "?", "Confirmación") == 0) {
-//                            boolean bandera = this.objArticleService.deleteArticle(idArticuloConvertido);
-//                            if (bandera) {
-//                                Utilidades.mensajeExito("El artículo con identificador " + idArticuloConvertido + " fue eliminado exitosamente", "Artículo eliminado");
-//                                llenarTabla();
-//                            } else {
-//                                Utilidades.mensajeAdvertencia("El artículo con identificador " + idArticuloConvertido + " no fue eliminado", "Error al eliminar");
-//                            }
-//                        }
-//                    } catch (Exception ex) {
-//                        Utilidades.mensajeError("Error al eliminar artículo. Inténtelo de nuevo más tarde", "Error");
-//                    }
-//                } else if (boton.getName().equals("Actualizar")) {
-////                    VtnActualizarArticulo objVtnActualizarArticulo = new VtnActualizarArticulo(objServicio, objServicio2);
-////                    objVtnActualizarArticulo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-////                    objVtnActualizarArticulo.cargarDatos(idArticuloConvertido);
-////                    objVtnActualizarArticulo.setVisible(true);
-//                } else if (boton.getName().equals("PDF")) {
-////                    // Obtener el artículo correspondiente
-////                    Articulo articulo = this.objServicio.obtenerArticuloPorId(idArticuloConvertido);
-////
-////                    // Verifica que el artículo no sea nulo
-////                    if (articulo != null) {
-////                        File pdfFile = articulo.getArchivoPdf();
-////
-////                        // Verifica que el archivo PDF no sea nulo
-////                        if (pdfFile != null) {
-////                            if (pdfFile.exists()) {
-////                                try {
-////                                    // Abrir el archivo PDF usando la clase Desktop
-////                                    Desktop desktop = Desktop.getDesktop();
-////                                    if (desktop.isSupported(Desktop.Action.OPEN)) {
-////                                        desktop.open(pdfFile);
-////                                    } else {
-////                                        Utilidades.mensajeAdvertencia("No se soporta la acción de abrir archivos en este sistema.", "Acción no soportada");
-////                                    }
-////                                } catch (IOException e) {
-////                                    Utilidades.mensajeError("Error al intentar abrir el archivo PDF.", "Error");
-////                                    e.printStackTrace();
-////                                }
-////                            } else {
-////                                Utilidades.mensajeAdvertencia("El archivo PDF no existe.", "Archivo no encontrado");
-////                            }
-////                        } else {
-////                            Utilidades.mensajeAdvertencia("No se encontró el archivo PDF asociado al artículo.", "Archivo no encontrado");
-////                        }
-////                    } else {
-////                        Utilidades.mensajeAdvertencia("No se encontró el artículo con el ID especificado.", "Artículo no encontrado");
-////                    }
-//                }
-//            }
-//        }
-    }//GEN-LAST:event_jTableListarArticulosMouseClicked
 
     private void jButtonConsultarArticuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConsultarArticuloActionPerformed
         llenarTablaById();

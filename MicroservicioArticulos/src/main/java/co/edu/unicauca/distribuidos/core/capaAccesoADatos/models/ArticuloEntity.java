@@ -1,5 +1,7 @@
 package co.edu.unicauca.distribuidos.core.capaAccesoADatos.models;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ArticuloEntity {
-	private static int idCounter = 0; // Variable estática para contar IDs
+	private static final AtomicInteger idCounter = new AtomicInteger(0);
 	private Integer id;
 	private String nombre;
 	private String autores;
@@ -16,6 +18,6 @@ public class ArticuloEntity {
 	private String revista;
 
 	public ArticuloEntity() {
-        this.id = ++idCounter; // Asigna el ID autoincremental
+		this.id = idCounter.incrementAndGet(); // Asigna un ID único y ordenado
 	}
 }

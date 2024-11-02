@@ -20,13 +20,16 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class ConferenceService {
 
     private static final String BASE_URL = "http://localhost:5002/api/conferencias";
     private final HttpClient client = HttpClient.newHttpClient();
-
+    private final List<ArticuloEntity> articulos = new ArrayList<>();
+    
     public void createConference(String nombreConferencia, int cantMaxArticulos) throws Exception {
 
         HttpClient cliente = HttpClient.newHttpClient();
@@ -34,7 +37,7 @@ public class ConferenceService {
 
         Map<String, Object> articleData = Map.of(
                 "nombreConferencia", nombreConferencia,
-                "articulos", "dsda",
+                "articulos",articulos,
                 "cantidadMaxArt", cantMaxArticulos
         );
 
@@ -148,6 +151,12 @@ public class ConferenceService {
             return "Conferencia eliminada con éxito";
         } else {
             throw new Exception("Error al eliminar la conferencia: " + response.body());
+        }
+    }
+
+    private static class ArticuloEntity {
+
+        public ArticuloEntity() {
         }
     }
 

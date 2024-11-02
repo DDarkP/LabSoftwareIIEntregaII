@@ -1,6 +1,7 @@
 package ArticlesView;
 
 import Utilidades.Utilidades;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -13,16 +14,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ArticleService {
 
     private static final String BASE_URL = "http://localhost:5001/api/articulos";
-    private static final String CONFERENCES_URL = "http://localhost:8085/api/conferences"; // Microservicio de conferencias
+    private static final String CONFERENCES_URL = "http://localhost:5002/api/conferencias"; // Microservicio de conferencias
     private final HttpClient client = HttpClient.newHttpClient();
-//    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public void registrarArticulo(String name, String authors, int cantAutores, String revista) {
+    public int registrarArticulo(String name, String authors, int cantAutores, String revista) {
         HttpClient cliente = HttpClient.newHttpClient();
         ObjectMapper object_Mapper = new ObjectMapper();
 
@@ -44,6 +45,22 @@ public class ArticleService {
 
             HttpResponse<String> response = cliente.send(request, HttpResponse.BodyHandlers.ofString());
 
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            //obtener id Del articulo registrado
+            try {
+                // Parsear el JSON
+                JsonNode jsonNode = objectMapper.readTree(response.body());
+
+                // Obtener el valor de "id"
+                int id = jsonNode.get("id").asInt();
+                System.out.println("ID: " + id);
+                return id;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            System.out.println("articulo registrado: " + response.body());
             if (response.statusCode() == 200) {
                 System.out.println("Artículo creado: " + response.body());
                 Utilidades.mensajeExito("El registro de la conferencia fue exitoso", "Registro exitoso");
@@ -53,6 +70,7 @@ public class ArticleService {
             }
         } catch (IOException | InterruptedException ex) {
         }
+        return -1;
     }
 
     // Método para obtener las conferencias
@@ -185,4 +203,83 @@ public class ArticleService {
         }
     }
 
+    public void asociarArticuloAConferencia(int articuloID, int conferenceID, String nombreArticulo) {
+        HttpClient cliente = HttpClient.newHttpClient();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        // Usar LinkedHashMap para mantener el orden
+        Map<String, Object> articleData = new LinkedHashMap<>();
+        articleData.put("id", String.valueOf(articuloID)); // Primero el ID
+        articleData.put("nombre", nombreArticulo); // Luego el nombre
+
+        try {
+            // Convertir los datos a JSON
+            String json = objectMapper.writeValueAsString(articleData);
+            System.out.println("json enviado: " + json);
+
+            // Crear la solicitud POST
+            String url = CONFERENCES_URL + "/" + conferenceID + "/articulos";
+            System.out.println(url);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .PUT(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
+
+            // Enviar la solicitud
+            HttpResponse<String> response = cliente.send(request, HttpResponse.BodyHandlers.ofString());
+
+            System.out.println(response.body());
+            // Verificar la respuesta
+            if (response.statusCode() == 200 || response.statusCode() == 201) {
+                System.out.println("Artículo asociado a conferencia: " + response.body());
+                Utilidades.mensajeExito("El artículo se ha asociado exitosamente a la conferencia.", "Asociación exitosa");
+            } else {
+                System.out.println("Error al asociar el artículo: " + response.statusCode());
+                Utilidades.mensajeError("No se pudo asociar el artículo a la conferencia.", "Error en la asociación");
+            }
+        } catch (IOException | InterruptedException ex) {
+            Utilidades.mensajeError("Hubo un error al procesar la solicitud.", "Error de red");
+        }
+    }
+
+//    public void asociarArticuloAConferencia(int articuloID, int conferenceID, String nombreArticulo) {
+//        HttpClient cliente = HttpClient.newHttpClient();
+//        ObjectMapper objectMapper = new ObjectMapper();
+//
+//        // Crear el JSON con los datos del artículo, ajustando "id" y "nombre" según tus necesidades
+//        Map<String, Object> articleData = Map.of(
+//                "id", String.valueOf(articuloID), // Usamos articuloID para el campo "id"
+//                "nombre", nombreArticulo // Y nombreArticulo para "nombre"
+//        );
+//
+//        try {
+//            // Convertir los datos a JSON
+//            String json = objectMapper.writeValueAsString(articleData);
+//
+//            System.out.println("json enviado: " + json);
+//            // Crear la solicitud POST
+//            String url = CONFERENCES_URL + "/" + conferenceID + "/articulos";
+//            System.out.println(url);
+//            HttpRequest request = HttpRequest.newBuilder()
+//                    .uri(URI.create(url))
+//                    .header("Content-Type", "application/json")
+//                    .PUT(HttpRequest.BodyPublishers.ofString(json))
+//                    .build();
+//
+//            // Enviar la solicitud
+//            HttpResponse<String> response = cliente.send(request, HttpResponse.BodyHandlers.ofString());
+//
+//            // Verificar la respuesta
+//            if (response.statusCode() == 200 || response.statusCode() == 201) {
+//                System.out.println("Artículo asociado a conferencia: " + response.body());
+//                Utilidades.mensajeExito("El artículo se ha asociado exitosamente a la conferencia.", "Asociación exitosa");
+//            } else {
+//                System.out.println("Error al asociar el artículo: " + response.statusCode());
+//                Utilidades.mensajeError("No se pudo asociar el artículo a la conferencia.", "Error en la asociación");
+//            }
+//        } catch (IOException | InterruptedException ex) {
+//            Utilidades.mensajeError("Hubo un error al procesar la solicitud.", "Error de red");
+//        }
+//    }
 }

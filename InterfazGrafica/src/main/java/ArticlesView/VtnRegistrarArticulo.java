@@ -7,36 +7,63 @@ package ArticlesView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 
-/**
- *
- * @author HSVSTT2
- */
 public class VtnRegistrarArticulo extends javax.swing.JFrame {
 
-    private ArticleService objArticleService;
+    private final ArticleService objArticleService;
+    private final HttpClient client = HttpClient.newHttpClient();
 
-    public VtnRegistrarArticulo() {
+    public VtnRegistrarArticulo() throws URISyntaxException {
         initComponents(); // Método generado por NetBeans para inicializar los componentes
-        objArticleService = new ArticleService(); // Inicializar la instancia de ArticleService
-        cargarConferenciasEnComboBox(jComboBoxConferencia);
+        objArticleService = new ArticleService();
+
+        try {
+            cargarConferenciasEnComboBox(jComboBoxConferencia);
+        } catch (IOException | InterruptedException ex) {
+            Logger.getLogger(VtnRegistrarArticulo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         jComboBoxRevision.addItem("En revision");
         jComboBoxRevision.addItem("Aprobado");
         jComboBoxRevision.addItem("Rechazado");
+
+        // Agrega un ActionListener para actualizar jTextFieldConferenceId
+        jComboBoxConferencia.addActionListener(e -> {
+            String selectedItem = (String) jComboBoxConferencia.getSelectedItem();
+            if (selectedItem != null && !selectedItem.isEmpty()) {
+                String id = selectedItem.split(" ")[0]; // Extrae el ID, asumiendo que es el primer valor
+                jTextFieldConferenceId.setText(id); // Actualiza el campo de texto
+            }
+        });
     }
 
-    // Método para cargar los nombres de las conferencias en un JComboBox
-    private void cargarConferenciasEnComboBox(JComboBox<String> comboBox) {
-        HttpClient client = HttpClient.newHttpClient();
+//    public VtnRegistrarArticulo() throws URISyntaxException {
+//        initComponents(); // Método generado por NetBeans para inicializar los componentes
+//        objArticleService = new ArticleService(); // Inicializar la instancia de ArticleService
+//        try {
+//            cargarConferenciasEnComboBox(jComboBoxConferencia);
+//        } catch (IOException ex) {
+//            Logger.getLogger(VtnRegistrarArticulo.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (InterruptedException ex) {
+//            Logger.getLogger(VtnRegistrarArticulo.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        String id = String.valueOf(jComboBoxConferencia.getSelectedItem().toString().charAt(0));
+//        jTextFieldConferenceId.setText(id);
+//
+//        jComboBoxRevision.addItem("En revision");
+//        jComboBoxRevision.addItem("Aprobado");
+//        jComboBoxRevision.addItem("Rechazado");
+//    }
+    private void cargarConferenciasEnComboBox(JComboBox<String> comboBox) throws URISyntaxException, IOException, InterruptedException {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI("http://localhost:5002/api/conferencias")) // Ajusta la URL según tu configuración
@@ -54,12 +81,14 @@ public class VtnRegistrarArticulo extends javax.swing.JFrame {
 
                 for (JsonElement element : jsonArray) {
                     String nombreConferencia = element.getAsJsonObject().get("nombreConferencia").getAsString();
-                    comboBox.addItem(nombreConferencia); // Agregar cada nombre al comboBox
+                    int idConferencia = element.getAsJsonObject().get("id").getAsInt();
+                    comboBox.addItem(idConferencia + " " + nombreConferencia); // Agregar id y nombrede la conferencia al comboBox
+//                    String idConf = String.valueOf(comboBox.getSelectedItem().toString().charAt(0));
                 }
             } else {
                 System.out.println("Error al obtener las conferencias: " + response.statusCode());
             }
-        } catch (IOException | InterruptedException | URISyntaxException e) {
+        } catch (URISyntaxException e) {
         }
     }
 
@@ -88,6 +117,7 @@ public class VtnRegistrarArticulo extends javax.swing.JFrame {
         jTextFieldCantAutores = new javax.swing.JTextField();
         jComboBoxRevision = new javax.swing.JComboBox();
         jLabel7 = new javax.swing.JLabel();
+        jTextFieldConferenceId = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -105,7 +135,7 @@ public class VtnRegistrarArticulo extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(272, 272, 272)
                 .addComponent(jLabel6)
-                .addContainerGap(288, Short.MAX_VALUE))
+                .addContainerGap(289, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -124,7 +154,7 @@ public class VtnRegistrarArticulo extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 743, Short.MAX_VALUE)
+            .addGap(0, 744, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -142,7 +172,7 @@ public class VtnRegistrarArticulo extends javax.swing.JFrame {
         jLabel2.setText("Autores:");
 
         jTextFieldTitulo.setFont(new java.awt.Font("Roboto Thin", 0, 15)); // NOI18N
-        jTextFieldTitulo.setText("Articulo 1");
+        jTextFieldTitulo.setText("Articulo Test");
 
         jTextAreaAutores.setColumns(20);
         jTextAreaAutores.setFont(new java.awt.Font("Roboto Thin", 0, 15)); // NOI18N
@@ -163,19 +193,21 @@ public class VtnRegistrarArticulo extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Roboto Thin", 0, 18)); // NOI18N
         jLabel4.setText("Conferencia:");
 
-        jComboBoxConferencia.setBackground(new java.awt.Color(102, 204, 255));
         jComboBoxConferencia.setFont(new java.awt.Font("Roboto Thin", 0, 15)); // NOI18N
 
         jLabel5.setFont(new java.awt.Font("Roboto Thin", 0, 18)); // NOI18N
         jLabel5.setText("Cantidad de Autores:");
 
         jTextFieldCantAutores.setFont(new java.awt.Font("Roboto Thin", 0, 15)); // NOI18N
-        jTextFieldCantAutores.setText("1");
+        jTextFieldCantAutores.setText("2");
 
         jComboBoxRevision.setFont(new java.awt.Font("Roboto Thin", 0, 15)); // NOI18N
 
         jLabel7.setFont(new java.awt.Font("Roboto Thin", 0, 18)); // NOI18N
         jLabel7.setText("Estado de revision:");
+
+        jTextFieldConferenceId.setEditable(false);
+        jTextFieldConferenceId.setEnabled(false);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -186,7 +218,7 @@ public class VtnRegistrarArticulo extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(66, 66, 66)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE))
+                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(101, 101, 101)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -199,14 +231,16 @@ public class VtnRegistrarArticulo extends javax.swing.JFrame {
                         .addGap(17, 17, 17)
                         .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(42, 42, 42)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButtonRegistrar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
+                    .addComponent(jTextFieldTitulo, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jComboBoxRevision, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jComboBoxConferencia, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
-                    .addComponent(jTextFieldTitulo)
-                    .addComponent(jTextFieldCantAutores)
-                    .addComponent(jComboBoxRevision, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(155, 155, 155))
+                    .addComponent(jTextFieldCantAutores))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldConferenceId, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(67, 67, 67))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -232,14 +266,15 @@ public class VtnRegistrarArticulo extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jComboBoxConferencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
+                            .addComponent(jLabel4)
+                            .addComponent(jTextFieldConferenceId))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jComboBoxRevision, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel7))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonRegistrar)
-                        .addGap(67, 67, 67))))
+                        .addContainerGap(42, Short.MAX_VALUE))))
         );
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.CENTER);
@@ -251,8 +286,10 @@ public class VtnRegistrarArticulo extends javax.swing.JFrame {
         String title = jTextFieldTitulo.getText();
         String authors = jTextAreaAutores.getText();
         int cantidadAutores = Integer.parseInt(jTextFieldCantAutores.getText());
-                
-        objArticleService.registrarArticulo(title, authors, cantidadAutores, jComboBoxRevision.getSelectedItem().toString());
+
+        int articleId = objArticleService.registrarArticulo(title, authors, cantidadAutores, jComboBoxRevision.getSelectedItem().toString());
+        int conferenceId = Integer.parseInt(jTextFieldConferenceId.getText());
+        objArticleService.asociarArticuloAConferencia(articleId, conferenceId, title);
         dispose();
     }//GEN-LAST:event_jButtonRegistrarActionPerformed
 
@@ -273,6 +310,7 @@ public class VtnRegistrarArticulo extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextAreaAutores;
     private javax.swing.JTextField jTextFieldCantAutores;
+    private javax.swing.JTextField jTextFieldConferenceId;
     private javax.swing.JTextField jTextFieldTitulo;
     // End of variables declaration//GEN-END:variables
 }

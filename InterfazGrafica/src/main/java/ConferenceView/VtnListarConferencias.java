@@ -23,9 +23,9 @@ public class VtnListarConferencias extends javax.swing.JInternalFrame {
         tableModel.addColumn("Id");
         tableModel.addColumn("Nombre");
         tableModel.addColumn("Articulos");
-        tableModel.addColumn("Cantidad articulos");
-        tableModel.addColumn("Actualizar");
-        tableModel.addColumn("Eliminar");
+        tableModel.addColumn("Tope de Articulos");
+        tableModel.addColumn("N. articulos registrados");
+        
     }
 
     public void limpiarTabla() {

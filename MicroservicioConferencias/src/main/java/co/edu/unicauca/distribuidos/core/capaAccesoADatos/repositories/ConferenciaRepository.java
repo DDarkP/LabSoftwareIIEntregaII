@@ -8,11 +8,14 @@ import org.springframework.stereotype.Repository;
 
 import co.edu.unicauca.distribuidos.core.capaAccesoADatos.models.ArticuloEntity;
 import co.edu.unicauca.distribuidos.core.capaAccesoADatos.models.ConferenciaEntity;
+import co.edu.unicauca.distribuidos.core.fachadaServices.services.ConferenciaServiceImpl;
+import co.edu.unicauca.distribuidos.core.fachadaServices.services.IConferenciaService;
 
 @Repository
 public class ConferenciaRepository {
 
 	private ArrayList<ConferenciaEntity> listaDeConferencias;
+	private IConferenciaService objConferenciaServiceImpl;
 
 	public ConferenciaRepository() {
 		this.listaDeConferencias = new ArrayList<ConferenciaEntity>();
