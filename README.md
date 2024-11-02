@@ -19,3 +19,4 @@ Escalabilidad mejorada: Cada microservicio se puede escalar de forma independien
 Desarrollo ágil: Equipos pueden trabajar en paralelo sin interferencias.
 Mayor resiliencia: Aislamiento de fallos, mejorando la estabilidad general del sistema.
 ## Video de Ejecucion de la Aplicacion:
+https://drive.google.com/drive/folders/1smKvoXEPryX83yC3mIplzdJnZRTs2vtY?usp=sharing
