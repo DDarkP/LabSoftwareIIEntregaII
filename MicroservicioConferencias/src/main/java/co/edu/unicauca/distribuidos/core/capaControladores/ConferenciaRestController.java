@@ -80,15 +80,4 @@ public class ConferenciaRestController {
 		conferencia.getArticulos().add(articulo); // Agrega el artículo a la lista
 		return conferenciaService.update(id,conferencia); // Guarda la conferencia actualizada
 	}
-
-	/*@PostMapping("/conferencias/{id}/articulos")
-	public ConferenciaDTO addArticuloToConferencia(@PathVariable Integer id, @RequestBody ArticuloEntity articulo) {
-		ConferenciaDTO conferencia = conferenciaService.findById(id);
-		if (conferencia == null) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Conferencia no encontrada");
-		}
-
-		conferencia.getArticulos().add(articulo); // Agrega el artículo a la lista
-		return conferenciaService.save(conferencia); // Guarda la conferencia actualizada
-	}*/
 }
